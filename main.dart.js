@@ -58359,19 +58359,19 @@ n.h("all these years updating it into the game it is today.")
 n=$.a()
 n.a=B.b
 n.b=B.d
-n.c=22
+n.c=24
 n.d=65
 n.h("Version 1.1.10")
 n=$.a()
 n.a=B.d
 n.b=B.b
 o=B.e.P(0.5)
-n.c=23
+n.c=24
 n.d=o
 n.h("Press I to Import a saved game.  Any other key to Pursue your Liberal Agenda.")
 n=B.e.P(14.5)
 o=$.a()
-o.c=24
+o.c=25
 o.d=n
 o.h("(click the game window to give it keyboard focus)")
 s=5
@@ -58419,7 +58419,7 @@ q=B.h.JS("",80)
 s=$.a()
 s.d=s.c=0
 s.h(q)
-for(r=1;r<23;++r){q=$.a()
+for(r=1;r<25;++r){q=$.a()
 q.c=r
 q.d=0
 q.h(" ")
@@ -58436,7 +58436,7 @@ q.c=r
 q.d=79
 q.h(" ")}q=B.h.JS("",80)
 s=$.a()
-s.c=22
+s.c=24
 s.d=0
 s.h(q)
 q=$.a()
