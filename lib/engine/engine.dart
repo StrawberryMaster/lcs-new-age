@@ -159,6 +159,16 @@ void addCenteredOptionText(
 }
 
 void mvaddstr(int y, int x, String s) => console.mvaddstr(y, x, s);
+
+/// Adds a string at the specified y coordinate, aligned to the right with an optional right margin
+/// [y] The y coordinate (row)
+/// [s] The string to display
+/// [marginX] Optional right margin (defaults to 0)
+void mvaddstrRight(int y, String s, {int marginX = 0}) {
+  int x = CONSOLE_WIDTH - s.length - marginX;
+  mvaddstr(y, x, s);
+}
+
 void mvaddstrc(int y, int x, Color fg, String s, {Color? bg}) {
   setColor(fg, background: bg ?? black);
   mvaddstr(y, x, s);

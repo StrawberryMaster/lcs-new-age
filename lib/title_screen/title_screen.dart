@@ -17,8 +17,8 @@ import 'package:lcs_new_age/utils/interface_options.dart';
 import 'package:lcs_new_age/utils/lcsrandom.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String gameVersion = "1.4.9";
-bool megaFounderCheat = false;
+const String gameVersion = "1.4.9.HF.1-SNAPSHOT";
+const String gameSaveCompatVersion = "1.4.9";
 
 Future<void> titleScreen() async {
   HighScores? highScores = await loadHighScores();
@@ -53,16 +53,16 @@ Future<void> titleScreen() async {
 
   // Add menu options
   setColor(white);
-  mvaddstrCenter(10, "Select an Option to Pursue your Liberal Agenda");
+  mvaddstrCenter(9, "Select an Option to Pursue your Liberal Agenda");
   setColor(lightGray);
-  addOptionText(12, 10, "C", continueText, enabledWhen: lastGameId != null);
-  addOptionText(12, 48, "L", "L - Load a Saved Game", enabledWhen: hasSaves);
-  addOptionText(13, 10, "N", "N - Start a New Game");
-  addOptionText(13, 48, "I", "I - Import a Save");
-  addOptionText(14, 10, "H", "H - View High Scores",
+  addOptionText(11, 10, "C", continueText, enabledWhen: lastGameId != null);
+  addOptionText(11, 48, "L", "L - Load a Saved Game", enabledWhen: hasSaves);
+  addOptionText(12, 10, "N", "N - Start a New Game");
+  addOptionText(12, 48, "I", "I - Import a Save");
+  addOptionText(13, 10, "H", "H - View High Scores",
       enabledWhen: hasHighScores);
-  addOptionText(14, 48, "V", "V - View Changelog");
-  addOptionText(15, 10, "O", "O - Gameplay Options");
+  addOptionText(13, 48, "V", "V - View Changelog");
+  addOptionText(14, 10, "O", "O - Gameplay Options");
   //addOptionText(15, 48, "M", "M - Mod Tools");
 
   while (true) {
@@ -229,26 +229,24 @@ void printTitleScreen(HighScores? highScores) {
       6, "and many others who have contributed to LCS over the years");
 
   setColor(black, background: lightGray);
-  mvaddstr(24, 65, "Version $gameVersion");
+  mvaddstrRight(23, "Version $gameVersion", marginX: 2);
   setColor(lightGray);
-  mvaddstrCenter(24,
-      "Press I to Import a saved game.  Any other key to Pursue your Liberal Agenda.");
-  mvaddstrCenter(25, "(click the game window to give it keyboard focus)");
+  mvaddstrCenter(24, "(click the game window to give it keyboard focus)");
 }
 
 void titleScreenFrame({bool includeEmDash = true, int bottom = 22}) {
   setColor(green, background: lightGray);
   mvaddstr(0, 0, "".padLeft(80));
-  for (int i = 1; i < 25; i++) {
+  for (int i = 1; i <= bottom; i++) {
     mvaddstr(i, 0, " ");
     mvaddstr(i, 1, " ");
     mvaddstr(i, 78, " ");
     mvaddstr(i, 79, " ");
   }
-  mvaddstr(24, 0, "".padLeft(80));
+  mvaddstr(bottom, 0, "".padLeft(80));
   setColor(lightGray);
   if (includeEmDash) {
-    mvaddstr(8, 2, "".padLeft(76, emDash));
+    mvaddstr(7, 2, "".padLeft(76, emDash));
     mvaddstr(16, 2, "".padLeft(76, emDash));
   }
 }

@@ -221,8 +221,7 @@ Future<ChaseOutcome> carChaseSequence() async {
   if (encounter.isEmpty) return ChaseOutcome.victory;
 
   // Add unique cars to the friendcar list
-  chaseSequence!.friendcar =
-      squad.map((p) => p.car).nonNulls.toSet().toList();
+  chase.friendcar = squad.map((p) => p.car).nonNulls.toSet().toList();
 
   mode = GameMode.carChase;
 

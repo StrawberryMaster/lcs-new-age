@@ -47,8 +47,8 @@ class Weapon extends Item {
   AmmoType? get loadedAmmoType => ammoTypes[loadedAmmoId];
   set loadedAmmoType(AmmoType? value) => loadedAmmoId = value?.idName;
   bool get empty => stackSize <= 0;
-  Iterable<AmmoType> get acceptableAmmo =>
-      type.attacks.map((attack) => attack.ammoType).nonNulls;
+  Iterable<String> get acceptableCartridge => type.acceptableCartridge;
+  Iterable<AmmoType> get acceptableAmmo => type.acceptableAmmo;
 
   @override
   Item clone() {
@@ -98,11 +98,18 @@ class Weapon extends Item {
     }
   }
 
-  Attack? getAttack(bool forceRanged, bool forceMelee, bool forceNoReload,
-      {bool allowSocial = false, Alignment? wielderAlignment}) {
-    Iterable<Attack> attacks = type.attacks.where((a) =>
-        a.alignmentRestriction == null ||
-        a.alignmentRestriction == wielderAlignment);
+  Attack? getAttack(
+    bool forceRanged,
+    bool forceMelee,
+    bool forceNoReload, {
+    bool allowSocial = false,
+    Alignment? wielderAlignment,
+  }) {
+    Iterable<Attack> attacks = type.attacks.where(
+      (a) =>
+          a.alignmentRestriction == null ||
+          a.alignmentRestriction == wielderAlignment,
+    );
     if (allowSocial && type.attacks.any((a) => a.socialDamage)) {
       return type.attacks.firstWhere((a) => a.socialDamage);
     }

@@ -245,6 +245,30 @@ set activeSquadMember(Creature? value) {
   }
 }
 
+List<Creature> get relevantLiberals {
+  Iterable<Creature> relevantLibIter = pool
+        .where((c) => c.isActiveLiberal);
+  // Check context to determine which pool to use
+  switch (mode) {
+    case GameMode.site:
+      if (activeSite != null) {
+        // On a site, check the entire LCS pool on that site
+        relevantLibIter = relevantLibIter.where((c) => c.site == activeSite);
+      }
+    case GameMode.carChase:
+    case GameMode.footChase:
+      // In chase modes, filter by location to handle large groups fleeing sieges
+      if (activeSite != null) {
+        relevantLibIter = relevantLibIter.where((c) => c.location == activeSite);
+      }
+    case GameMode.base:
+    case GameMode.title:
+      // Equipment transfer screen or n/a - check entire LCS pool
+      break;
+  }
+  return relevantLibIter.toList();
+}
+
 bool get siteAlarm => gameState.siteAlarm;
 set siteAlarm(bool value) => gameState.siteAlarm = value;
 SiteAlienation get siteAlienated => gameState.siteAlienated;

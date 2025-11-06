@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter_svg/flutter_svg.dart';
@@ -105,7 +106,7 @@ class _FlagBurningAnimationState extends State<FlagBurningAnimation>
   @override
   void initState() {
     super.initState();
-    animationController.forward();
+    unawaited(animationController.forward());
   }
 
   @override

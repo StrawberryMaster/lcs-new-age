@@ -290,9 +290,6 @@ Future<void> reviewMode(ReviewMode mode) async {
             tempp.skill(sk) < tempp.skillCap(sk)) {
           bright = true;
         }
-            tempp.skill(sk) < tempp.skillCap(sk)) {
-          bright = true;
-        }
       }
 
       setColor(bright ? white : lightGray);
@@ -823,9 +820,6 @@ Future<void> assembleSquad(Squad? cursquad) async {
       for (Skill sk in Skill.values) {
         skill += tempp.skill(sk);
         if (tempp.skillXP(sk) >= 100 + (10 * tempp.skill(sk)) &&
-            tempp.skill(sk) < tempp.skillCap(sk)) {
-          bright = true;
-        }
             tempp.skill(sk) < tempp.skillCap(sk)) {
           bright = true;
         }

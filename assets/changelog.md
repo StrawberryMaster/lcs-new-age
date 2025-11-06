@@ -1,3 +1,12 @@
+## 1.4.9.HF.0 - 9/27/2025
+* First Fork Version
+* Upgrade dependencies and Flutter SDK version
+* More CIA raid suspense. Love to see it.
+* Replicate missing dismantle logic when cops raid empty warehouses and in other cop raid scenarios where it was missing. Cops will now consistently confiscate loot, vehicles, and dismantle warehouse upgrades on all raid situations when lost/surrendered/empty(abandoned).
+* Added some extra Arch-Conservative execution methods
+* General small incremental code refactors
+* Add some common names (courtesy of StrawberryMaster/Felipe's fork)
+
 ## 1.4.9 - 6/15/2025
 * Renamed several safehouses when the LCS captures them
 * Adjusted the text for one of the news stories to refer to torture cells that are "more humane" instead of "more human"

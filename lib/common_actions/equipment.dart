@@ -357,9 +357,6 @@ Future<void> moveLoot(List<Item> dest, List<Item> source) async {
         (page + 1) * 18 < source.length) {
       page++;
     }
-        (page + 1) * 18 < source.length) {
-      page++;
-    }
   }
 
   for (int l = source.length - 1; l >= 0; l--) {

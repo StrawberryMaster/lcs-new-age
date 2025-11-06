@@ -25,7 +25,7 @@ part 'save_load.g.dart';
 Future<void> autoSaveGame() async {
   //Stopwatch stopwatch = Stopwatch()..start();
   final prefs = await SharedPreferences.getInstance();
-  await prefs.setString("gameVersion${gameState.uniqueGameId}", gameVersion);
+  await prefs.setString("gameVersion${gameState.uniqueGameId}", gameSaveCompatVersion);
   await prefs.setString(
       "savedGame${gameState.uniqueGameId}", jsonEncode(gameState.toJson()));
   await prefs.setString(

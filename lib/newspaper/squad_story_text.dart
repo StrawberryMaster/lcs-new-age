@@ -4,8 +4,11 @@ import 'package:lcs_new_age/location/site.dart';
 import 'package:lcs_new_age/newspaper/news_story.dart';
 import 'package:lcs_new_age/politics/alignment.dart';
 
-String squadStoryTextLocation(NewsStory ns, bool ccs,
-    {bool includeOpening = true}) {
+String squadStoryTextLocation(
+  NewsStory ns,
+  bool ccs, {
+  bool includeOpening = true,
+}) {
   String story = "";
   if (includeOpening) story += "  The events took place ";
   String placename = ns.loc!.getName();
@@ -71,50 +74,12 @@ String squadStoryTextLocation(NewsStory ns, bool ccs,
       }
     default:
       story += "at the ";
-      if (liberalguardian && !ccs) story += "notorious ";
+      if (ns.publicationAlignment == DeepAlignment.eliteLiberal && !ccs) {
+        story += "notorious ";
+      }
   }
   if (ccs) {
-    switch (ns.loc!.type) {
-      case SiteType.upscaleApartment:
-        story += "University Dormitory.  ";
-      case SiteType.barAndGrill:
-        story += "Gay Nightclub.  ";
-      case SiteType.cosmeticsLab:
-        story += "Animal Shelter.  ";
-      case SiteType.geneticsLab:
-        story += "Research Ethics Commission HQ.  ";
-      case SiteType.policeStation:
-        story += "Police Reform Office.  ";
-      case SiteType.courthouse:
-        story += "Abortion Clinic.  ";
-      case SiteType.prison:
-        story += "Rehabilitation Center.  ";
-      case SiteType.intelligenceHQ:
-        story += "Media Independence Office.  ";
-      case SiteType.sweatshop:
-        story += "Labor Union HQ.  ";
-      case SiteType.dirtyIndustry:
-        story += "Greenpeace Offices.  ";
-      case SiteType.nuclearPlant:
-        story += "Whirled Peas Museum.  ";
-      case SiteType.corporateHQ:
-        story += "Welfare Assistance Agency.  ";
-      case SiteType.ceoHouse:
-        story += "Tax Collection Agency.  ";
-      case SiteType.amRadioStation:
-        story += "Public Radio Station.  ";
-      case SiteType.cableNewsStation:
-        story += "Network News Station.  ";
-      case SiteType.armyBase:
-        story += "Greenpeace Offices.  ";
-      case SiteType.fireStation:
-        story += "ACLU Branch Office.  ";
-      case SiteType.bank:
-        story += "Richard Dawkins Food Bank.  ";
-      default:
-        story += placename;
-        story += ".  ";
-    }
+    story += mapCCSPlace(ns.loc!, placename);
   } else {
     story += placename;
   }

@@ -298,8 +298,45 @@ Future<void> siegeCheck() async {
               continue;
             }
           }
+          bool hadLoot = l.loot.isNotEmpty;
+          bool hadVehicles = vehiclePool.any((v) => v.location == l);
           l.loot.clear();
           vehiclePool.removeWhere((v) => v.location == l);
+          if (hadLoot || hadVehicles) {
+            move(y++, 1);
+            if (l.siege.escalationState == SiegeEscalation.police) {
+              addstr("The police confiscate everything");
+            } else {
+              addstr("The soldiers confiscate everything");
+            }
+            if (hadVehicles) addstr(", including vehicles");
+            addstr(".");
+            move(y++, 1);
+            await getKey();
+          }
+          if (l.compound.fortified) {
+            addstr("The compound fortifications are dismantled.");
+            move(y++, 1);
+            l.compound.fortified = false;
+          }
+          if (l.businessFront) {
+            l.businessFront = false;
+            if (!l.businessFront) {
+              addstr("Materials relating to the business front have been taken.");
+              move(y++, 1);
+            }
+          }
+          if (l.compound.boobyTraps) {
+            mvaddstr(y += 2, 1, "The booby traps are disarmed and removed.");
+            l.compound.boobyTraps = false;
+          }
+          if (l.compound.aaGun) {
+            if (laws[Law.gunControl] != DeepAlignment.archConservative) {
+              mvaddstr(y += 2, 1, "The anti-aircraft gun is dismantled.");
+              l.compound.aaGun = false;
+            }
+          }
+          await getKey();
         }
       }
 
@@ -534,11 +571,44 @@ Future<void> siegeCheck() async {
             "In the dead of the night, a column of unmarked black vans with "
             "tinted windows surrounds the ${l.getName()}.");
         await getKey();
-        mvaddstrc(console.y + 1, 1, white,
-            "Hair stands on end... the air is charged with the sound of silence.");
+        final ciaSuspense = [
+          "Hair stands on end... the air is charged with the sound of silence.",
+          "The temperature seems to drop as shadows move beyond the windows.",
+          "Static electricity crackles through the air... something is very wrong.",
+        ].nonNulls;
+        mvaddstrc(console.y + 1, 1, white, ciaSuspense.random);
+        await getKey();
+        // Compound-specific suspense lines
+        List<String> compoundSuspense = [];
+        if (l.compound.cameras) {
+          compoundSuspense.addAll([
+            "Every security camera simultaneously pivots to stare directly at squad members.",
+          ]);
+        }
+        if (l.compound.aaGun) {
+          compoundSuspense.addAll([
+            "The AA gun's computer displays error messages in languages that don't exist.",
+          ]);
+        }
+        if (l.businessFront) {
+          compoundSuspense.addAll([
+            "The business phone rings once, then goes dead.",
+          ]);
+        }
+        if (l.type == SiteType.warehouse) {
+          compoundSuspense.addAll([
+            "Shipping containers loom like tombstones in the growing darkness.",
+          ]);
+        } else if (l.type == SiteType.apartment) {
+          compoundSuspense.addAll([
+            "The building's elevator moves between floors, though no one called it.",
+          ]);
+        }
+        mvaddstr(console.y + 2, 1, compoundSuspense.random);
         await getKey();
         if (l.compound.cameras) {
           mvaddstr(console.y + 2, 1, "The camera feeds are dead.");
+          l.siege.camerasOff = true;
           await getKey();
         }
         if (l.compound.generator) {
@@ -552,14 +622,12 @@ Future<void> siegeCheck() async {
         }
         mvaddstr(console.y + 2, 1,
             "The compound is plunged into darkness as the doors spontaneously unlock.");
+        l.siege.lightsOff = true;
         await getKey();
         mvaddstrc(console.y + 2, 1, red, "The CIA has arrived.");
         await getKey();
-
         l.siege.activeSiegeType = SiegeType.cia;
         l.siege.underAttack = true;
-        l.siege.lightsOff = true;
-        l.siege.camerasOff = true;
         l.extraHeatFromCIA = 0;
         offendedCia = false;
         for (Creature p in pool) {
@@ -1131,6 +1199,16 @@ Future<void> siegeDefeat() async {
       if (!loc.businessFront) {
         mvaddstr(
             12, 1, "Materials relating to the business front have been taken.");
+      }
+    }
+    if (loc.compound.boobyTraps) {
+      mvaddstr(14, 1, "The booby traps are disarmed and removed.");
+      loc.compound.boobyTraps = false;
+    }
+    if (loc.compound.aaGun) {
+      if (laws[Law.gunControl] != DeepAlignment.archConservative) {
+        mvaddstr(16, 1, "The anti-aircraft gun is dismantled.");
+        loc.compound.aaGun = false;
       }
     }
 

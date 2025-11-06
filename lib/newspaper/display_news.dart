@@ -361,7 +361,7 @@ Future<void> displayStory(NewsStory ns, View? header) async {
             }
           }
 
-          if (liberalguardian && !ccs) {
+          if (ns.publicationAlignment == DeepAlignment.eliteLiberal && !ccs) {
             if (did(Drama.killedSomebody)) typesum--;
           }
 
@@ -389,7 +389,9 @@ Future<void> displayStory(NewsStory ns, View? header) async {
               if (typesum >= 3) {
                 story += ", ";
               } else if (typesum == 2) {
-                if (drama.contains(" and ") || (liberalguardian && !ccs)) {
+                if (drama.contains(" and ") ||
+                    (ns.publicationAlignment == DeepAlignment.eliteLiberal &&
+                        !ccs)) {
                   story += ", and ";
                 } else {
                   story += " and ";

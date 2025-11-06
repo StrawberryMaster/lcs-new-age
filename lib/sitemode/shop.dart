@@ -397,35 +397,95 @@ class Shop extends ShopOption {
           move(y, 59);
           addstr("\$${(availableOptions[i] as ShopItem).price(false)}");
         }
-      }
-
-      mvaddstrc(22, 0, lightGray,
-          "Press a Letter to select an option"); //allow customize "option"? -XML
-      mvaddstr(23, 0, pageStr);
-      mvaddstr(24, 0, "Enter - ${buyer.name} $exitText");
-
-      int c = await getKey();
-
-      //PAGE UP
-      if ((isPageUp(c) || c == Key.upArrow || c == Key.leftArrow) && page > 0) {
-        page--;
-      }
-      //PAGE DOWN
-      if ((isPageDown(c) || c == Key.downArrow || c == Key.rightArrow) &&
-          (page + 1) * 19 < availableOptions.length) {
-        page++;
-      }
-
-      if (c >= Key.a && c <= Key.s) {
-        int p = page * 19 + c - Key.a;
-        if (p < availableOptions.length && availableOptions[p].isAvailable()) {
-          await availableOptions[p].choose(customers, buyer, false);
+      },
+      onChoice: (index) async {
+        debugPrint(
+            "index: $index, availableOptions.length: ${availableOptions.length}");
+        if (index < availableOptions.length &&
+            availableOptions[index].isAvailable()) {
+          await availableOptions[index].choose(customers, buyer!, false);
+          // ignore: dead_code
+          if (fullscreen) {
+            return true;
+          } else {
+            locHeader();
+            printParty();
+          }
         }
-        break;
-      }
+        return false;
+      },
+    );
+  }
 
-      if (isBackKey(c)) break;
-    }
+  Future<void> browseAmmo(Squad customers, Creature? buyer) async {
+    buyer ??= customers.members[0];
+    List<ShopOption> availableOptions =
+        options.where((o) => o.display()).toList();
+    await pagedInterface(
+      headerPrompt: "What will ${buyer.name} buy?",
+      headerKey: {4: "NAME", 24: "DAMAGE", 39: "BOX SIZE", 59: "BOX PRICE"},
+      footerPrompt: "Press a Letter to buy Ammo",
+      topY: 9,
+      pageSize: 10,
+      count: availableOptions.length,
+      lineBuilder: (y, key, index) {
+        AmmoType ammo =
+            ammoTypes[(availableOptions[index] as ShopItem).itemId]!;
+        addOptionText(y, 0, key, "$key - ${ammo.name}",
+            enabledWhen: availableOptions[index].isAvailable());
+        move(y, 24);
+        addstr(ammo.damage.toString());
+        if (ammo.multihit > 1) {
+          addstr("x${ammo.multihit}");
+        }
+        move(y, 39);
+        addstr(ammo.boxSize.toString());
+        move(y, 59);
+        addstr("\$${(availableOptions[index] as ShopItem).price(false)}");
+      },
+      onChoice: (index) async {
+        if (index < availableOptions.length &&
+            availableOptions[index].isAvailable()) {
+          await availableOptions[index].choose(customers, buyer!, false);
+          locHeader();
+          printParty();
+        }
+        return false;
+      },
+    );
+  }
+
+  Future<void> browseClothes(Squad customers, Creature? buyer) async {
+    buyer ??= customers.members[0];
+    List<ShopOption> availableOptions =
+        options.where((o) => o.display()).toList();
+    await pagedInterface(
+      headerPrompt: "What will ${buyer.name} buy?",
+      headerKey: {4: "NAME", 24: "SPECIAL TRAITS (IF ANY)", 59: "PRICE"},
+      footerPrompt: "Press a Letter to buy Clothes",
+      count: availableOptions.length,
+      topY: 9,
+      pageSize: 10,
+      lineBuilder: (y, key, index) {
+        ClothingType clothing =
+            clothingTypes[(availableOptions[index] as ShopItem).itemId]!;
+        addOptionText(y, 0, key, "$key - ${clothing.name}",
+            enabledWhen: availableOptions[index].isAvailable());
+        move(y, 24);
+        addstr(clothing.traitsList(true).join(", "));
+        move(y, 59);
+        addstr("\$${(availableOptions[index] as ShopItem).price(false)}");
+      },
+      onChoice: (index) async {
+        if (index < availableOptions.length &&
+            availableOptions[index].isAvailable()) {
+          await availableOptions[index].choose(customers, buyer!, false);
+          locHeader();
+          printParty();
+        }
+        return false;
+      },
+    );
   }
 
   Future<void> sellLoot(Squad customers) async {
